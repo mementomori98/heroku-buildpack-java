@@ -89,14 +89,25 @@ install_jdk() {
 
   let start=$(nowms)
   JVM_COMMON_BUILDPACK=${JVM_COMMON_BUILDPACK:-https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/jvm.tgz}
+  echo "Debug: JVM_COMMON_BUILDPACK=${JVM_COMMON_BUILDPACK}"
+
+  echo "Debug: Downloading JVM common buildpack..."
+
   mkdir -p /tmp/jvm-common
   curl --retry 3 --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common --strip-components=1
+
+  echo "Debug: Sourcing bin/util..."
   source /tmp/jvm-common/bin/util
+  echo "Debug: Sourcing bin/java..."
   source /tmp/jvm-common/bin/java
+  echo "Debug: Sourcing opt/jdbc.sh..."
   source /tmp/jvm-common/opt/jdbc.sh
+
   mtime "jvm-common.install.time" "${start}"
 
   let start=$(nowms)
+  echo "Debug: Invoking install_java_with_overlay..."
   install_java_with_overlay "${install_dir}" "${cache_dir}"
   mtime "jvm.install.time" "${start}"
+  echo "Debug: install_java_with_overlay done."
 }
