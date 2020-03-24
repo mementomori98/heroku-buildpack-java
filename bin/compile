@@ -4,9 +4,14 @@
 # fail fast
 set -e
 
+echo "Debug: Running bin/compile..."
+
 BPLOG_PREFIX="buildpack.java"
 
+echo "Debug: Resolving buildpack directory..."
 BP_DIR=$(cd $(dirname $0)/..; pwd) # absolute path
+echo "Debug: Buildpack directoy is ${BP_DIR}"
+
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
@@ -27,7 +32,7 @@ install_jdk "${BUILD_DIR}" "${CACHE_DIR}"
 
 echo "Debug: JDK installed."
 
-# Exit here to avoid actual deploys with this debugging branch
+echo "Debug: Now deliberately failing the build to prevent deployment!"
 exit 1;
 
 [ -n "$(find ${BUILD_DIR} -type f -name "*.kt")" ] && mcount "kotlin.source"
